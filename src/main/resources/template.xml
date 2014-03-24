@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<websites>
+	<!-- 中国汽车消费网  outlink -->
+	<website domain="www.315che.com">
+		<url-pattern>http://(www|price|tousu|bbs)\.315che.com/</url-pattern>
+		<url-pattern>http://www.315che.com/\w+/</url-pattern>
+		<outlink>
+			<entry occur="mandatory" trace="false" description="content link">
+				<template>
+					<expression>//a</expression>
+					<regular-match regex="(http://inf.315che.com/n/\d+_\d+/\d{4,8}/|http://bbs.315che.com/\w+/.+\d{4,8}\.htm)"/>
+				</template>
+			</entry>
+		</outlink>
+	</website>
+	<!-- 中国汽车消费网  outlink -->
+	<website domain="www.315che.com">
+		<url-pattern>http://www.315che.com/\w+/\d+/</url-pattern>
+		<outlink>
+			<entry occur="mandatory" trace="false" description="content link">
+				<template>
+					<expression>//body/div/div/div/div/dl/dd/a[1]</expression>
+					<regular-match regex="(http://inf.315che.com/n/\d+_\d+/\d{4,8}/|http://bbs.315che.com/\w+/.+\d{4,8}\.htm)"/>
+				</template>
+				<template>
+					<expression>//a[@class='paleft']</expression>
+					<regular-match regex="(http://inf.315che.com/n/\d+_\d+/\d{4,8}/|http://bbs.315che.com/\w+/.+\d{4,8}\.htm)"/>
+				</template>
+			</entry>
+		</outlink>
+	</website>
+	<!-- 中国汽车消费网  bbs  outlink -->
+	<website domain="bbs.315che.com">
+		<url-pattern>http://bbs.315che.com/forums/jinghua-\d{1,2}\.htm</url-pattern>
+		<outlink>
+			<entry occur="mandatory" trace="false" description="content link">
+				<template>
+					<expression>//p[@class='chekuai']</expression>
+					<regular-match regex="(http://inf.315che.com/n/\d+_\d+/\d{4,8}/|http://bbs.315che.com/\w+/.+\d{4,8}\.htm)"/>
+				</template>
+			</entry>
+		</outlink>
+	</website>
+    <!--中国汽车消费网    data-->
+    <website domain="www.315che.com">
+        <url-pattern>http://inf.315che.com/n/\d+_\d+/\d{4,8}/</url-pattern>
+        <data>
+            <!--当前路径-->
+            <field name="current_path" multi-value="false" occur="mandatory"
+                   description="current path">
+                <template>
+                    <expression>//div[@websiteID='adnews']/div[1]</expression>
+                    <range start="您现在的位置：" />
+                </template>
+            </field>
+            <!--标题-->
+            <field name="title" multi-value="false" occur="mandatory"
+                   description="title">
+                <template>
+                    <expression>//h1</expression>
+                </template>
+            </field>
+            <!--正文-->
+            <field name="text" multi-value="false" occur="mandatory"
+                   description="text">
+                <template>
+                    <expression>//body/div/div/div[@websiteID='TermsId'][1]</expression>
+                </template>
+            </field>
+            <!--作者-->
+            <!--<field name="author" multi-value="false" occur="mandatory"-->
+                   <!--description="author">-->
+                <!--<template>-->
+                    <!--<expression>@default="中国汽车消费网"</expression>-->
+                <!--</template>-->
+            <!--</field>-->
+            <!--来源-->
+            <field name="from" multi-value="false" occur="mandatory"
+                   description="article comes from where">
+                <template>
+                    <expression>@default="中国汽车消费网"</expression>
+                </template>
+            </field>
+            <!--发表时间-->
+            <field name="publish_time" multi-value="false" occur="mandatory"
+                   description="publish_time">
+                <template>
+                    <expression>//div[@class='art_info']/a[1]</expression>
+                    <script method="var re = /\d{4}年\d{1,2}月\d{1,2}日?/gi; var result= param.match(re);return (result==null||result.length==0)? param: result[0].replace(/年|月/g, &quot;-&quot;).replace(/日/g, &quot; &quot;);" />
+                </template>
+            </field>
+        </data>
+    </website>
+
+    <!--中国汽车消费网  bbs data-->
+    <website domain="bbs.315che.com">
+        <url-pattern>http://bbs.315che.com/\w+/.+\d{4,8}\.htm</url-pattern>
+        <data>
+            <!--标题-->
+            <field name="title" multi-value="false" occur="mandatory"
+                   description="title">
+                <template>
+                    <expression>//td//h2</expression>
+                </template>
+            </field>
+            <!--正文-->
+            <field name="text" multi-value="false" occur="mandatory"
+                   description="text">
+                <template>
+                    <expression>//div[@class='postmessage defaultpost']</expression>
+                </template>
+            </field>
+            <!--作者-->
+            <field name="author" multi-value="false" occur="mandatory"
+                   description="author">
+                <template>
+                    <expression>//td[@class='postauthor']/cite</expression>
+                </template>
+            </field>
+            <!--作者信息：所在地、注册时间、爱车等-->
+            <field name="author_info" multi-value="false" occur="optional"
+                   description="author info">
+                <template>
+                    <expression>//td[@class='postauthor']/ul[@class='otherinfo']</expression>
+                </template>
+            </field>
+            <!--发表时间-->
+            <field name="publish_time" multi-value="false" occur="mandatory"
+                   description="publish_time">
+                <template>
+                    <expression>//div[@class='postinfo']/em[2]</expression>
+                </template>
+            </field>
+            <!-- 文章类别是否精华，投票等-->
+            <!--<field name="rate" multi-value="false" occur="mandatory"-->
+                   <!--description="rate">-->
+                <!--<template>-->
+                    <!--<expression>@default="精华"</expression>-->
+                <!--</template>-->
+            <!--</field>-->
+            <!-- 查看数 -->
+            <field name="pv" multi-value="false" occur="mandatory"
+                   description="number of page views">
+                <template>
+                    <expression>//div[@class='pages']/strong</expression>
+                    <range start="查看:"/>
+                </template>
+            </field>
+            <!-- 回复数 -->
+            <!--<field name="comment_num" multi-value="false" occur="mandatory"-->
+                   <!--description="nubmer of comments">-->
+                <!--<template>-->
+                    <!--<expression></expression>-->
+                    <!--<range start="回复："/>-->
+                <!--</template>-->
+            <!--</field>-->
+        </data>
+    </website>
+</websites>
